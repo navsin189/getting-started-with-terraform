@@ -26,11 +26,30 @@ provider "aws" {
 # }
 ###### Syntax ######
 
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance
 resource "aws_instance" "my_first_instance" {
   ami           = "ami-06f621d90fa29f6d0"
   instance_type = "t2.micro"
 
   tags = {
     instance_number = "1"
+    name            = "Demo"
   }
+}
+
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/ebs_volume
+resource "aws_ebs_volume" "my_first_instance_ebs" {
+  availability_zone = aws_instance.my_first_instance.availability_zone
+  size              = 10
+
+  tags = {
+    ec2_name = "Demo"
+  }
+}
+
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/volume_attachment
+resource "aws_volume_attachment" "my_first_instance_ebs_attachment" {
+  device_name = "/dev/sdb"
+  volume_id   = aws_ebs_volume.my_first_instance_ebs.id
+  instance_id = aws_instance.my_first_instance.id
 }
