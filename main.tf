@@ -30,7 +30,7 @@ provider "aws" {
 resource "aws_instance" "my_first_instance" {
   ami           = "ami-06f621d90fa29f6d0"
   instance_type = "t2.micro"
-
+  vpc_security_group_ids = [aws_security_group.my_first_instance_security_group.id]
   tags = {
     instance_number = "1"
     name            = "Demo"
@@ -52,4 +52,35 @@ resource "aws_volume_attachment" "my_first_instance_ebs_attachment" {
   device_name = "/dev/sdb"
   volume_id   = aws_ebs_volume.my_first_instance_ebs.id
   instance_id = aws_instance.my_first_instance.id
+}
+
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group
+resource "aws_security_group" "my_first_instance_security_group" {
+  name        = "allow_tls"
+  description = "Allow TLS inbound traffic"
+
+  ingress {
+    description      = "webserver"
+    from_port        = 80
+    to_port          = 80
+    protocol         = "tcp"
+    cidr_blocks      = ["0.0.0.0/0"]
+  }
+  ingress {
+    description     = "ssh"
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
+    cidr_blocks     = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port        = 0
+    to_port          = 0
+    protocol         = "-1"
+    cidr_blocks      = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "allow_tls"
+  }
 }
