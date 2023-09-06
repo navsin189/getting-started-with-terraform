@@ -31,6 +31,7 @@ resource "aws_instance" "my_first_instance" {
   ami           = "ami-06f621d90fa29f6d0"
   instance_type = "t2.micro"
   vpc_security_group_ids = [aws_security_group.my_first_instance_security_group.id]
+  key_name      = aws_key_pair.my_first_instance_key_pair.id
   tags = {
     instance_number = "1"
     name            = "Demo"
@@ -83,4 +84,10 @@ resource "aws_security_group" "my_first_instance_security_group" {
   tags = {
     Name = "allow_tls"
   }
+}
+
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/key_pair
+resource "aws_key_pair" "my_first_instance_key_pair" {
+  key_name   = "my-key"
+  public_key = "ssh-rsa <generated_key> <username>@<mail>"
 }
