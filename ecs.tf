@@ -25,6 +25,7 @@ resource "aws_ecs_task_definition" "first_task" {
   ])
 }
 
+# Terraform is not a right tool to handle ECS task execution
 data "aws_ecs_task_execution" "first_task_execution" {
   cluster         = aws_ecs_cluster.first_cluster.id
   task_definition = aws_ecs_task_definition.first_task.arn
