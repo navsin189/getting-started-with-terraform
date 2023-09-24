@@ -13,7 +13,7 @@ terraform {
 # but it get the keys stored by AWS CLI
 # C:\Users\<username>\.aws
 provider "aws" {
-  region  = "ap-south-1"
+  region = "ap-south-1"
 }
 
 ###### Syntax ######
@@ -28,10 +28,10 @@ provider "aws" {
 
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance
 resource "aws_instance" "my_first_instance" {
-  ami           = "ami-06f621d90fa29f6d0"
-  instance_type = "t2.micro"
+  ami                    = "ami-06f621d90fa29f6d0"
+  instance_type          = "t2.micro"
   vpc_security_group_ids = [aws_security_group.my_first_instance_security_group.id]
-  key_name      = aws_key_pair.my_first_instance_key_pair.id
+  key_name               = aws_key_pair.my_first_instance_key_pair.id
   tags = {
     instance_number = "1"
     name            = "Demo"
@@ -61,24 +61,24 @@ resource "aws_security_group" "my_first_instance_security_group" {
   description = "Allow TLS inbound traffic"
 
   ingress {
-    description      = "webserver"
-    from_port        = 80
-    to_port          = 80
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
+    description = "webserver"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
   ingress {
-    description     = "ssh"
-    from_port       = 22
-    to_port         = 22
-    protocol        = "tcp"
-    cidr_blocks     = ["0.0.0.0/0"]
+    description = "ssh"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
   egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
