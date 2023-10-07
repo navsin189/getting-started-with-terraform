@@ -1,3 +1,7 @@
+data "aws_vpc" "default" {
+  default = true
+}
+
 data "aws_availability_zones" "available" {
   state = "available"
 }
@@ -12,20 +16,20 @@ resource "aws_db_instance" "mysql_rds" {
   password               = "password"
   skip_final_snapshot    = true
   vpc_security_group_ids = [aws_security_group.mysql_rds_security_group.id]
-  db_subnet_group_name   =  # Two Subnets
+  db_subnet_group_name   = aws_db_subnet_group.mysql_rds_subnet_group.id
 
 }
 
 resource "aws_security_group" "mysql_rds_security_group" {
   name        = "mysql-sg"
   description = "Allow EC2 instances to connect"
-
+  vpc_id      = data.aws_vpc.default.id
   ingress {
     description = "Allow mysql traffic from ec2 instance"
     from_port   = 3306
     to_port     = 3306
     protocol    = "tcp"
-    cidr_blocks = ["172.3X.3X.0/24"] #EC2 instance CIDR Range
+    cidr_blocks = ["172.31.0.0/16"] #EC2 instance CIDR Range
   }
 
   egress {
@@ -39,8 +43,9 @@ resource "aws_security_group" "mysql_rds_security_group" {
 
 
 resource "aws_subnet" "mysql_rds_subnets" {
+  vpc_id            = data.aws_vpc.default.id
   count             = 2
-  cidr_block        = ["172.3X.3X.0/24","172.3X.3X.0/24"]
+  cidr_block        = var.rds_subnet[count.index]
   availability_zone = data.aws_availability_zones.available.names[count.index]
 
   tags = {
@@ -50,6 +55,7 @@ resource "aws_subnet" "mysql_rds_subnets" {
 
 resource "aws_route_table" "mysql_rds_private_route" {
 
+  vpc_id         = data.aws_vpc.default.id
   tags = {
     Name = "Route table for RDS"
   }
@@ -82,4 +88,8 @@ output "database_endpoint" {
 output "database_port" {
   description = "the port of database"
   value       = aws_db_instance.mysql_rds.port
+}
+
+output "default_vpc_id" {
+  value = data.aws_vpc.default.id
 }
