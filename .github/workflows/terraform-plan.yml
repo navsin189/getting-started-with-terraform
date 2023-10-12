@@ -26,9 +26,9 @@ jobs:
           sed -i 's/C\:\/Users\/Naveen.Singh\/.ssh\/id_rsa.pub/id_rsa.pub/' variables.tf
       - name: Configure AWS Credentials
         run: |
-          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws configure set region ${{ secrets.AWS_DEFAULT_REGION }}
+          aws configure set aws_access_key_id "${{ secrets.AWS_ACCESS_KEY }}"
+          aws configure set aws_secret_access_key "${{ secrets.AWS_SECRET_KEY }}"
+          aws configure set region "${{ secrets.AWS_DEFAULT_REGION }}"
         shell: bash
       - run: echo "The ${{ github.repository }} repository has been cloned to the runner."
       - run: terraform init
