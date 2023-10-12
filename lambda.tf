@@ -27,5 +27,5 @@ resource "aws_lambda_function" "test_lambda" {
   filename      = "lambda_function_payload.zip"
   role          = aws_iam_role.iam_for_lambda.arn
   runtime       = "nodejs18.x"
-  handler       = "lambda.js"
+  handler       = "handler"
 }

@@ -1,5 +1,4 @@
 .terraform/
 .*lock*
 *state*
-*.js
 *.zip
