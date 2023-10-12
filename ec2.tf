@@ -61,7 +61,7 @@ resource "aws_security_group" "my_first_instance_security_group" {
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/key_pair
 resource "aws_key_pair" "my_first_instance_key_pair" {
   key_name   = "aws_ec2"
-  public_key = file("C:/Users/Naveen.Singh/.ssh/id_rsa.pub")
+  public_key = file(var.key_path)
 }
 
 output "public_ip" {
